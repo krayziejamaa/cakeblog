@@ -13,10 +13,13 @@ services:
 
 services:
   db:
-    image: mariadb:10.3
+    image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cake_love
+    ports:
+      -"3308:3306"
 
   phpmyadmin:
     image: phpmyadmin
@@ -24,4 +27,6 @@ services:
     ports:
       - 8080:80
     environment:
-      - PMA_ARBITRARY=1
+      - PPMA_HOST: db
+      - PMA_USER: root
+      - PMA_PASSWORD: root
