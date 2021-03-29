@@ -9,7 +9,7 @@ services:
     volumes:
       - ./src:/var/www/html/
 
-  version: '3.1'
+version: '3.1'
 
 services:
   db:
@@ -19,14 +19,14 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: cake_love
     ports:
-      -"3308:3306"
+      - "3308:3306"
 
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
     restart: always
     ports:
-      - 8080:80
+      - "8080:80"
     environment:
-      - PPMA_HOST: db
-      - PMA_USER: root
-      - PMA_PASSWORD: root
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
