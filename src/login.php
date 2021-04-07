@@ -1,5 +1,20 @@
-<?php include "includes/header.php"; ?>
-<?php include "includes/navigation.php"; ?>
+<?php require_once("includes/header.php"); ?>
+<?php require("includes/navigation.php"); ?>
+<?php
+
+if ($session->is_signed_in()) {
+    redirect("index.php");
+}
+
+if (isset($_POST['submit'])) {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+}
+
+//verify user from User class
+
+
+?>
 
 
 <section class="container-fluid">
@@ -14,8 +29,6 @@
     <div class="row justify-content-center">
         <div class="col-md-4 col-md-offset-3">
             <div class="login">
-
-
                 <div class="panel-body">
                     <h3 id="login"><i class="fa fa-user fa-1x"></i><span>Login</span></h3>
                     <form class="form-container">
