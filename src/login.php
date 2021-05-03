@@ -1,18 +1,31 @@
 <?php require_once("includes/header.php"); ?>
-<?php require("includes/navigation.php"); ?>
+<?php require_once("includes/navigation.php"); ?>
 <?php
 
-if ($session->is_signed_in()) {
-    redirect("index.php");
-}
+// if ($session->is_signed_in()) {
+//     redirect("welcome.php");
+// }
 
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
+
+
+    //verify user from User class
+    $user_success = User::user_verify($username, $password);
+
+    if ($user_success) {
+        $session->login($user_success);
+        // echo "Welcome!";
+        redirect("welcome.php");
+    } else {
+        $the_message = "Your username and/or password are incorrect";
+    }
+} else {
+    $the_message = "";
+    $username = "";
+    $password = "";
 }
-
-//verify user from User class
-
 
 ?>
 
@@ -21,57 +34,49 @@ if (isset($_POST['submit'])) {
 
 
 </section>
-<?php include "includes/panel-top.php"; ?>
+<?php include("includes/panel-top.php"); ?>
 <div class="container">
 
     <div class="form-gap"></div>
 
     <div class="row justify-content-center">
         <div class="col-md-4 col-md-offset-3">
-            <div class="login">
-                <div class="panel-body">
-                    <h3 id="login"><i class="fa fa-user fa-1x"></i><span>Login</span></h3>
-                    <form class="form-container">
+            <div class="register">
+                <h4 class="bg-danger"><?php echo $the_message; ?></h4>
 
-                        <form id="login-form" role="form" autocomplete="off" class="form" method="post">
+                <form id="login-id" action="" method="post">
 
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user color-blue"></i></span>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" value="<?php echo htmlentities($username); ?>">
 
-                                    <input name="username" type="text" class="form-control" placeholder="Enter Username">
-                                </div>
-                            </div>
+                    </div>
 
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock color-blue"></i></span>
-                                    <input name="password" type="password" class="form-control" placeholder="Enter Password">
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" value="<?php echo htmlentities($password); ?>">
 
-                            <div class="form-group">
-
-                                <input name="login" class="btn btn-lg btn-primary btn-block" value="Login" type="submit">
-                            </div>
+                    </div>
 
 
-                        </form>
-                    </form>
+                    <div class="form-group">
+                        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
 
-                </div><!-- Body-->
+                    </div>
 
+
+                </form>
             </div>
-            <!-- </div> -->
+
         </div>
         <!-- </div>
         </div> -->
     </div>
 </div>
 
-<?php include "includes/panel-bottom.php"; ?>
+<?php include("includes/panel-bottom.php"); ?>
 
 
 
 
-<?php include "includes/footer.php"; ?>
+<?php include("includes/footer.php"); ?>

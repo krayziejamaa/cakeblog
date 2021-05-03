@@ -18,7 +18,7 @@ class DB
     {
 
         //instantiate db connection
-        $this->connection = new mysqli('DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME');
+        $this->connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
         if ($this->connection->connect_errno) {
             die("Database connection failed badly" . $this->connection->connect_errno);
@@ -27,8 +27,12 @@ class DB
 
     public function db_query($sql)
     {
+
         $result = $this->connection->query($sql);
-        $this->query_confirm($result);
+        if (!$result) {
+            echo $this->connection->errno;
+        }
+
         return $result;
     }
 
@@ -42,11 +46,11 @@ class DB
 
     public function escape_string($string)
     {
-        $escape_string = $this->connection->real_escape_string($string);
-        return $escape_string;
+        $escaped_string = $this->connection->real_escape_string($string);
+        return $escaped_string;
     }
 
-    public function insert_id()
+    public function the_insert_id()
     {
 
         return mysqli_insert_id($this->connection);

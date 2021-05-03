@@ -4,7 +4,7 @@ class database_object
 {
 
     protected static $database_table = "register";
-    protected static $database_fields = array('id', 'firstname', 'lastname', 'username', 'password');
+    protected static $database_table_fields = array('id', 'firstname', 'lastname', 'username', 'password');
 
     public $errors = array();
     public $error_in_upload_array = array(
@@ -19,25 +19,25 @@ class database_object
     );
 
 
-    public function set_files($file)
-    {
-        //handle error (no file)
-        if (empty($file) || !$file || !is_array($file)) {
-            $this->errors[] = "No file was uploaded";
-            return false;
-        } elseif ($file['error'] != 0) {
+    // public function set_files($file)
+    // {
+    //     //handle error (no file)
+    //     if (empty($file) || !$file || !is_array($file)) {
+    //         $this->errors[] = "No file was uploaded";
+    //         return false;
+    //     } elseif ($file['error'] != 0) {
 
-            //otherwise if error we save the error in the array error
-            $this->errors[] = $this->error_in_upload_array[$file['error']];
-            return false;
-        } else {
+    //         //otherwise if error we save the error in the array error
+    //         $this->errors[] = $this->error_in_upload_array[$file['error']];
+    //         return false;
+    //     } else {
 
-            $this->filename = basename($file['name']);
-            $this->tmp_path = $file['tmp_name'];
-            $this->type = $file['type'];
-            $this->size = $file['size'];
-        }
-    }
+    //         $this->filename = basename($file['name']);
+    //         $this->tmp_path = $file['tmp_name'];
+    //         $this->type = $file['type'];
+    //         $this->size = $file['size'];
+    //     }
+    // }
 
     //so that we don't have to instantiate find_all_users() we use a static method
     public static function find_all()
@@ -48,22 +48,23 @@ class database_object
 
     public static function find_by_id($id)
     {
-        global $database;
-        $the_result_array = static::find_by_query("SELECT * FROM " . static::$database_table . " WHERE id = $id ");
+        global $db;
+        $the_result_array = static::find_by_query("SELECT * FROM " .
+            static::$database_table . " WHERE id = $id ");
 
         return !empty($the_result_array) ? array_shift($the_result_array) : false;
     }
 
     public static function find_by_query($sql)
     {
-        global $database;
-        $result_set = $database->query($sql);
+        global $db;
+        $result_set = $db->db_query($sql);
 
         //to use the instantiation method we create an empty array to put our object
         $the_object_array = array();
 
 
-        //we create a loop to fetch the table from the database
+        //we create a loop to fetch th
         //and brings back the results from the table columns
         while ($row = mysqli_fetch_array($result_set)) {
 
@@ -115,9 +116,23 @@ class database_object
         return array_key_exists($the_attribute, $object_properties);
     }
 
+    public function query($sql)
+    {
+        $result = $this->connection->query($sql);
+        $this->query_confirm($result);
+        return $result;
+    }
+
+    private function query_confirm($result)
+    {
+        if (!$result) {
+            die("Query failed" . $this->connection->error);
+        }
+    }
+
     public function clean_properties()
     {
-        global $database;
+        global $db;
 
         //we create an empty array where we place the clean values
         //then returning that array so we can use it
@@ -129,12 +144,13 @@ class database_object
         foreach ($this->properties() as $key => $value) {
 
             //we clean the $value and then assign it to the array
-            $clean_properties[$key] = $database->escape_string($value);
+            $clean_properties[$key] = $db->escape_string($value);
         }
 
         //we then return the array
         return $clean_properties;
     }
+
 
     //whenever we create a method to abstract we create a protected functiom
     protected function properties()
@@ -142,7 +158,7 @@ class database_object
 
         $properties = array();
 
-        foreach (static::$database_fields as $database_field) {
+        foreach (static::$database_table_fields as $database_field) {
             if (property_exists($this, $database_field)) {
 
                 //database_fields as a $ because it is not a property
@@ -168,30 +184,20 @@ class database_object
 
     public function create()
     {
-        global $database;
+        global $db;
 
         $properties = $this->clean_properties();
 
-        //We create a query and store in a variable $sql
-        //we can abstract by imploding(separating each value by a coma)
-        //then using the array_key to pull the keys which are username, password, firstname, lastname
         $sql = "INSERT INTO " . static::$database_table . "(" . implode(",", array_keys($properties)) . ")";
         $sql .= "VALUES ('" . implode("','", array_values($properties)) . "')";
 
 
         //To send the database class query, which will return a boolean
         //we can therefore put it in an iff statement
-        if ($database->query($sql)) {
+        if ($db->db_query($sql)) {
 
-            //As we are not assigning an id to our object
-            //we need to make sure we pull that id when we create the data above and
-            //apply it to our object
 
-            //to summarise, we need to pull our id and assign it to the object
-
-            //we get the last id from the query here and
-            //once we have it, we can assign to this object property
-            $this->id = $database->the_insert_id();
+            $this->id = $db->the_insert_id();
 
             return true;
         } else {
@@ -204,61 +210,50 @@ class database_object
     public function update()
     {
 
-        global $database;
+        global $db;
 
-
-        //to abstract this method, we cam create an array to handle the sql query
-        //namely the key(username) and the value
         $properties = $this->clean_properties();
 
-        //we first create an empty array
         $properties_pairs = array();
 
-        //we use a foreach loop to loop through the variable $properties
-        //and with each loop pulling the $key and the $value and then assign to the array
         foreach ($properties as $key => $value) {
 
-            //we use qoutes as it is a string
             $properties_pairs[] = "{$key}='{$value}'";
         }
 
-
-        //We form a query to update the database to UPDATE users table
-        //and set values of the columns
         $sql = "UPDATE " . static::$database_table . " SET ";
 
-        //we divide each keys and value with a comma
         $sql .= implode(", ", $properties_pairs);
-        $sql .= " WHERE id= " . $database->escape_string($this->id);
+        $sql .= " WHERE id= " . $db->escape_string($this->id);
 
-        $database->query($sql);
+        $db->db_query($sql);
 
-        //we can use a ternary operator in place of an if statement
-        return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+
+        return (mysqli_affected_rows($db->connection) == 1) ? true : false;
     }
 
     public function delete()
     {
-        global $database;
+        global $db;
 
         $sql = "DELETE FROM " . static::$database_table . "  ";
-        $sql .= " WHERE id= " . $database->escape_string($this->id);
+        $sql .= " WHERE id= " . $db->escape_string($this->id);
         $sql .= " LIMIT 1";
 
-        $database->query($sql);
+        $db->db_query($sql);
 
-        //we can use a ternary operator in place of an if statement
-        return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+
+        return (mysqli_affected_rows($db->connection) == 1) ? true : false;
     }
 
     //this function/method counts the number of photos, users anf comments
     public static function count_all()
     {
 
-        global $database;
+        global $db;
 
         $sql = "SELECT COUNT(*) FROM " . static::$database_table;
-        $result_set = $database->query($sql);
+        $result_set = $db->db_query($sql);
         $row = mysqli_fetch_array($result_set);
 
         return array_shift($row);

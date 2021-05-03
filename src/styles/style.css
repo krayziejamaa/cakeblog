@@ -35,11 +35,15 @@
     text-align: center;
 }
 
+.form-control {
+    width: auto;
+}
+
 .register {
     margin-right: 20rem;
     margin-top: 20rem;
     display: flex;
-    width: 40rem;
+    width: 60rem;
     text-align: center;
 }
 

@@ -4,12 +4,14 @@ class Session
 {
     private $signed_in = false;
     public $user_id;
+    public $message;
 
 
     function __construct()
     {
         session_start();
         $this->check_login();
+        //     $this->check_message();
         $this->check_message();
     }
 

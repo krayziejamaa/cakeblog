@@ -1,12 +1,34 @@
-<?php include "includes/header.php"; ?>
-<?php include "includes/navigation.php"; ?>
+<?php include("includes/header.php"); ?>
+<?php include("includes/navigation.php"); ?>
+
+
+
+
+<?php
+$user = new User();
+if (isset($_POST['create'])) {
+
+    // echo "Connected!";
+    if ($user) {
+        $user->firstname = $_POST['firstname'];
+        $user->lastname = $_POST['lastname'];
+        $user->username = $_POST['username'];
+        $user->password = $_POST['password'];
+
+        $user->save();
+    }
+}
+
+
+
+?>
 
 <section class="container-fluid">
 
 
 </section>
 
-<?php include "includes/panel-top.php"; ?>
+<?php include("includes/panel-top.php"); ?>
 <div class="container">
 
     <div class="form-gap"></div>
@@ -15,47 +37,38 @@
         <div class="col-md-4 col-md-offset-3">
             <div class="register">
 
-
                 <div class="panel-body">
-                    <form class="form-container-register">
+                    <form action="" method="post" enctype="multipart/form-data">
 
-                        <form id="login-form" role="form" autocomplete="off" class="form" method="post">
+                        <div class="col-md-6 col-md-offset-3">
 
                             <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user color-blue"></i></span>
-
-                                    <input name="firstname" type="text" class="form-control" placeholder="Enter First Name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user color-blue"></i></span>
-
-                                    <input name="lastname" type="text" class="form-control" placeholder="Enter Last Name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user color-blue"></i></span>
-
-                                    <input name="username" type="text" class="form-control" placeholder="Enter Username">
-                                </div>
+                                <label for="username">Username</label>
+                                <input type="text" name="username" class="form-control">
                             </div>
 
                             <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock color-blue"></i></span>
-                                    <input name="password" type="password" class="form-control" placeholder="Enter Password">
-                                </div>
+                                <label for="first name">First Name</label>
+                                <input type="text" name="firstname" class="form-control">
                             </div>
 
-                            <div class="form-group">
-                                <input name="register" class="btn btn-lg btn-primary btn-block" value="Register" type="submit">
+                            <div class=" form-group">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" name="lastname" class="form-control">
                             </div>
 
+                            <div class=" form-group">
+                                <label for="password">Password</label>
+                                <input type="password" name="password" class="form-control">
+                            </div>
 
-                        </form>
+                            <div class=" form-group">
+                                <input type="submit" name="create" class="btn btn-primary pull-right">
+                            </div>
+
+                        </div>
+
+
                     </form>
 
                 </div><!-- Body-->
@@ -69,6 +82,6 @@
 </div>
 </section>
 
-<?php include "includes/panel-bottom.php"; ?>
+<?php include("includes/panel-bottom.php"); ?>
 
-<?php include "includes/footer.php"; ?>
+<?php include("includes/footer.php"); ?>

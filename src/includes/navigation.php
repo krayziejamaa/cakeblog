@@ -4,15 +4,15 @@
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="./index.php">Home<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="../index.php">Home<span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="nav justify-content-end">
             <li class="nav-item">
-                <a class="nav-link active" href="./login.php"><i class="fa fa-user fa-0.5x"></i><span>Login</span></a>
+                <a class="nav-link active" href="../login.php"><i class="fa fa-user fa-0.5x"></i><span>Login</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./registration.php">Register</a>
+                <a class="nav-link" href="../registration.php">Register</a>
             </li>
         </ul>
     </div>
