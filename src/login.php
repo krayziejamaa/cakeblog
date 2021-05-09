@@ -2,10 +2,6 @@
 <?php require_once("includes/navigation.php"); ?>
 <?php
 
-// if ($session->is_signed_in()) {
-//     redirect("welcome.php");
-// }
-
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
@@ -17,7 +13,7 @@ if (isset($_POST['submit'])) {
     if ($user_success) {
         $session->login($user_success);
         // echo "Welcome!";
-        redirect("welcome.php");
+        redirect("landing.php");
     } else {
         $the_message = "Your username and/or password are incorrect";
     }
