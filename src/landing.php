@@ -34,8 +34,8 @@ if (!$session->is_signed_in()) {;
                     ?>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="" ../logout.php"">Logout</a>
-                    <a class="dropdown-item" href="../edit_prof.php">Edit Profile</a>
+                    <a class="dropdown-item" href="../logout.php"">Logout</a>
+                    <a class=" dropdown-item" href="../edit_prof.php">Edit Profile</a>
                     <div class="dropdown-divider"></div>
                 </div>
             </li>

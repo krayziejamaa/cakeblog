@@ -4,13 +4,13 @@
 //in this file we define the paths
 //in this file we require once the classes and methods and
 
-// defined('DS') ? null : define('DS', DIRECTORY_SEPARATOR);
+defined('DS') ? null : define('DS', DIRECTORY_SEPARATOR);
 
-// defined('SITE_ROOT') ? null : define('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'] . DS . 'Cake');
+defined('SITE_ROOT') ? null : define('SITE_ROOT', $_SERVER['DOCUMENT_ROOT'] . DS . 'Cake');
 
-// defined('INCLUDES_PATH') ? null : define('INCLUDES_PATH', SITE_ROOT . DS . 'src' . DS .  'includes');
+defined('INCLUDES_PATH') ? null : define('INCLUDES_PATH', SITE_ROOT . DS . 'src' . DS .  'includes');
 
-// defined('PIC_PATH') ? null : define('PIC_PATH', "http://localhost/Cake/");
+defined('PIC_PATH') ? null : define('PIC_PATH', "http://localhost/Cake/");
 
 //require_once ensures a file is included once
 require_once("functions.php");

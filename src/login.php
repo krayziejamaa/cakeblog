@@ -4,23 +4,23 @@
 
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $user_password = trim($_POST['user_password']);
 
 
     //verify user from User class
-    $user_success = User::user_verify($username, $password);
+    $user_success = User::user_verify($username, $user_password);
 
     if ($user_success) {
         $session->login($user_success);
         // echo "Welcome!";
-        redirect("landing.php");
+        redirect("profile.php");
     } else {
         $the_message = "Your username and/or password are incorrect";
     }
 } else {
     $the_message = "";
     $username = "";
-    $password = "";
+    $user_password = "";
 }
 
 ?>
@@ -50,8 +50,12 @@ if (isset($_POST['submit'])) {
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" name="password" value="<?php echo htmlentities($password); ?>">
+                        <input type="password" class="form-control" name="user_password" value="<?php echo htmlentities($password); ?>">
 
+                    </div>
+
+                    <div class="form-group">
+                        <a href="#">Forgot Password?</a>
                     </div>
 
 

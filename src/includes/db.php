@@ -49,8 +49,7 @@ class database_object
     public static function find_by_id($id)
     {
         global $db;
-        $the_result_array = static::find_by_query("SELECT * FROM " .
-            static::$database_table . " WHERE id = $id ");
+        $the_result_array = static::find_by_query("SELECT * FROM " . static::$database_table . " WHERE id = $id ");
 
         return !empty($the_result_array) ? array_shift($the_result_array) : false;
     }
@@ -58,7 +57,7 @@ class database_object
     public static function find_by_query($sql)
     {
         global $db;
-        $result_set = $db->db_query($sql);
+        $result_set = $db->query($sql);
 
         //to use the instantiation method we create an empty array to put our object
         $the_object_array = array();
@@ -194,7 +193,7 @@ class database_object
 
         //To send the database class query, which will return a boolean
         //we can therefore put it in an iff statement
-        if ($db->db_query($sql)) {
+        if ($db->query($sql)) {
 
 
             $this->id = $db->the_insert_id();
@@ -226,7 +225,7 @@ class database_object
         $sql .= implode(", ", $properties_pairs);
         $sql .= " WHERE id= " . $db->escape_string($this->id);
 
-        $db->db_query($sql);
+        $db->query($sql);
 
 
         return (mysqli_affected_rows($db->connection) == 1) ? true : false;
@@ -240,7 +239,7 @@ class database_object
         $sql .= " WHERE id= " . $db->escape_string($this->id);
         $sql .= " LIMIT 1";
 
-        $db->db_query($sql);
+        $db->query($sql);
 
 
         return (mysqli_affected_rows($db->connection) == 1) ? true : false;
@@ -253,7 +252,7 @@ class database_object
         global $db;
 
         $sql = "SELECT COUNT(*) FROM " . static::$database_table;
-        $result_set = $db->db_query($sql);
+        $result_set = $db->query($sql);
         $row = mysqli_fetch_array($result_set);
 
         return array_shift($row);

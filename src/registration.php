@@ -7,13 +7,11 @@
 <?php
 $user = new User();
 if (isset($_POST['create'])) {
-
-    // echo "Connected!";
     if ($user) {
         $user->firstname = $_POST['firstname'];
         $user->lastname = $_POST['lastname'];
         $user->username = $_POST['username'];
-        $user->password = $_POST['password'];
+        $user->user_password = $_POST['user_password'];
 
         $user->save();
     }

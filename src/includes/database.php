@@ -25,23 +25,24 @@ class DB
         }
     }
 
-    public function db_query($sql)
-    {
 
-        $result = $this->connection->query($sql);
-        if (!$result) {
-            echo $this->connection->errno;
-        }
 
-        return $result;
-    }
-
-    private function query_confirm($result)
+    public function query_confirm($result)
     {
         // only needed within db class
         if (!$result) {
-            die("Database connection failed " . $this->connection->error);
+            die("Database connection failed " . $this->connection->errno);
         }
+    }
+
+
+    public function query($sql)
+    {
+
+        $result = $this->connection->query($sql);
+        $this->query_confirm($result);
+
+        return $result;
     }
 
     public function escape_string($string)
